@@ -14,7 +14,13 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "protractor-sync-options-plugin": [
+        "dist/protractor-sync-options-plugin/protractor-sync-options-plugin",
+        "dist/protractor-sync-options-plugin"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
