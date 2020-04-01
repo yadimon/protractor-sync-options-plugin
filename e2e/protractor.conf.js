@@ -9,7 +9,7 @@ require('ts-node').register({
 const { SpecReporter } = require('jasmine-spec-reporter');
 
 /** @type IgnoreTask[] */
-const ignoreTasks = [{source: 'setTimeout'}, {source: 'setInterval'}, {source: 'XMLHttpRequest.send'}];
+const ignoreTasks = [{source: 'setTimeout'}, {source: 'setInterval'}, {source: 'XMLHttpRequest.send'}]; // TODO change dynamic by tests
 
 /**
  * @type { import("protractor").Config }

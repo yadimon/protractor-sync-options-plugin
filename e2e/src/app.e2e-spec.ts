@@ -1,7 +1,7 @@
-import { AppPage } from './app.po';
-import { browser, logging } from 'protractor';
+import {AppPage} from './app.po';
+import {$, browser, logging} from 'protractor';
 
-describe('workspace-project App', () => {
+describe('Protractor Sync Options Plugin', () => {
   let page: AppPage;
 
   beforeEach(async () => {
@@ -9,10 +9,9 @@ describe('workspace-project App', () => {
     await page.navigateTo();
   });
 
-  it('should ignore running setTimeout', async (done) => {
+  it('should ignore running setTimeout', async () => {
     await page.enableTimeoutBtn.click();
     await simpleTest();
-    done();
   });
 
   it('should ignore running setInterval', async () => {
@@ -46,6 +45,30 @@ describe('workspace-project App', () => {
   xit('should ignore pending tasks from special npm package', async () => {
     // TODO implement feature + test
   });
+
+  describe('waitForAngularEnabled patch', () => {
+    it('should ignore setTimeout after disable and enable .waitForAngularEnabled()', async () => {
+      await browser.waitForAngularEnabled(false);
+      await page.navigateTo();
+      await browser.waitForAngularEnabled(true);
+      await page.enableTimeoutBtn.click();
+      await simpleTest();
+    });
+
+    it('should ignore setTimeout after redirect to non-agnular and back', async () => {
+      await page.redirectBtn.click();
+      await browser.waitForAngularEnabled(false);
+      const goBackBtn = $('#go-back');
+      await browser.driver.wait(goBackBtn.isDisplayed());
+      await goBackBtn.click();
+      await browser.waitForAngularEnabled(true);
+
+      await page.enableTimeoutBtn.click();
+      await simpleTest();
+    });
+  });
+
+
 
   afterEach(async () => {
     // Assert that there are no errors emitted from the browser

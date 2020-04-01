@@ -11,6 +11,10 @@ exports.patchTestability = function (ignoreTasks) {
     return tasks.every(isFiltered);
   }
 
+  if (!window.getAllAngularTestabilities) {
+    return "non angular";
+  }
+
   const testability = window.getAllAngularTestabilities()[0]; // TODO all apps
   const Testability = testability.constructor;
   const isStableOrig = Testability.prototype.isStable;
@@ -21,9 +25,11 @@ exports.patchTestability = function (ignoreTasks) {
   };
 
   // already patched
-  if (isStableOrig === newIsStable) {
-    return;
+  if (isStableOrig.toString() === newIsStable.toString()) {
+    return "already patched";
   }
 
   Testability.prototype.isStable = newIsStable;
+
+  return "patch done"
 };

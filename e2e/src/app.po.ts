@@ -6,6 +6,7 @@ export class AppPage {
   public runPromiseBtn = $('#runPromise');
   public runObservableBtn = $('#runObservable');
   public runRequestBtn = $('#runRequest');
+  public redirectBtn = $('#redirect');
 
   public async navigateTo(): Promise<any> {
     await browser.get(browser.baseUrl);

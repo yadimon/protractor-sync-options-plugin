@@ -26,14 +26,14 @@ export class AppComponent {
 
   }
 
-  public runPromise() {
+  public runPromise(): Promise<void> {
     console.log('run promise');
-    new Promise((res) => {
+    return new Promise((res) => {
       setTimeout(() => {
         console.log('promise with timeout done');
-        res()
+        res();
       }, this.longTime);
-    })
+    });
   }
 
   public runObservable() {
@@ -51,6 +51,9 @@ export class AppComponent {
     });
   }
 
+  public navigateToNonAngular() {
+    window.location.assign('http://localhost:4200/non-angular.html');
+  }
 }
 
 
