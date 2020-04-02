@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {timer} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
+import {debounce} from 'lodash';
 
 @Component({
   selector: 'app-root',
@@ -49,6 +50,14 @@ export class AppComponent {
     this.httpClient.get('https://reqres.in/api/users?delay=30').subscribe((res) => {
       console.log('xhr request done');
     });
+  }
+
+  public run3rdPartySetTimeout() {
+    console.log('start 3rd party fn');
+    const fn = debounce(() => {
+      console.log('3rd party fn done');
+    }, this.longTime);
+    fn();
   }
 
   public navigateToNonAngular() {

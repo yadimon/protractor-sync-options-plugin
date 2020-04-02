@@ -46,6 +46,10 @@ describe('Protractor Sync Options Plugin', () => {
     // TODO implement feature + test
   });
 
+  xit('should ignore 3rd party lodash setTimeout if only .creationLocation set to "lodash"', async () => {
+    // TODO implement
+  });
+
   describe('waitForAngularEnabled patch', () => {
     it('should ignore setTimeout after disable and enable .waitForAngularEnabled()', async () => {
       await browser.waitForAngularEnabled(false);

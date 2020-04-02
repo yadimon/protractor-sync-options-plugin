@@ -6,6 +6,7 @@ export class AppPage {
   public runPromiseBtn = $('#runPromise');
   public runObservableBtn = $('#runObservable');
   public runRequestBtn = $('#runRequest');
+  public run3rdPartySetTimeoutBtn = $('#run3rdPartySetTimeout');
   public redirectBtn = $('#redirect');
 
   public async navigateTo(): Promise<any> {
