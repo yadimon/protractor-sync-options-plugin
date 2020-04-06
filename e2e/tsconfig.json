@@ -8,6 +8,11 @@
       "jasmine",
       "jasminewd2",
       "node"
-    ]
+    ],
+    "paths": {
+      "protractor-sync-options-plugin": [
+        "projects/protractor-sync-options-plugin/src/public-api.ts"
+      ]
+    }
   }
 }

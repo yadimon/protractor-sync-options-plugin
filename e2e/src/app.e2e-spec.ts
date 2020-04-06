@@ -1,5 +1,8 @@
 import {AppPage} from './app.po';
 import {$, browser, logging} from 'protractor';
+import {IgnoreTask, plugin} from 'protractor-sync-options-plugin';
+
+// TODO find a way to test fails without waiting for timeout
 
 describe('Protractor Sync Options Plugin', () => {
   let page: AppPage;
@@ -10,26 +13,31 @@ describe('Protractor Sync Options Plugin', () => {
   });
 
   it('should ignore running setTimeout', async () => {
+    await setTasks([{source: 'setTimeout'}]);
     await page.enableTimeoutBtn.click();
     await simpleTest();
   });
 
   it('should ignore running setInterval', async () => {
+    await setTasks([{source: 'setInterval'}]);
     await page.enableIntervalBtn.click();
     await simpleTest();
   });
 
-  it('should ignore running promise', async () => {
+  it('should ignore running promise (setTimeout)', async () => {
+    await setTasks([{source: 'setTimeout'}]);
     await page.runPromiseBtn.click();
     await simpleTest();
   });
 
-  it('should ignore running observable', async () => {
+  it('should ignore running observable (setInterval)', async () => {
+    await setTasks([{source: 'setInterval'}]);
     await page.runObservableBtn.click();
     await simpleTest();
   });
 
   it('should ignore xhr request', async () => { // TODO simulate pending xhr
+    await setTasks([{source: 'XMLHttpRequest.send'}]);
     await page.runRequestBtn.click();
     await simpleTest();
   });
@@ -42,15 +50,17 @@ describe('Protractor Sync Options Plugin', () => {
     // TODO implement feature + test
   });
 
-  xit('should ignore pending tasks from special npm package', async () => {
-    // TODO implement feature + test
-  });
-
-  xit('should ignore 3rd party lodash setTimeout if only .creationLocation set to "lodash"', async () => {
-    // TODO implement
+  it('should ignore 3rd party lodash setTimeout if only .creationLocation set to "lodash"', async () => {
+    await setTasks([{creationLocation: 'lodash'}]);
+    await page.run3rdPartySetTimeoutBtn.click();
+    await simpleTest();
   });
 
   describe('waitForAngularEnabled patch', () => {
+    beforeEach(async () => {
+      await setTasks([{source: 'setTimeout'}]);
+    });
+
     it('should ignore setTimeout after disable and enable .waitForAngularEnabled()', async () => {
       await browser.waitForAngularEnabled(false);
       await page.navigateTo();
@@ -59,7 +69,7 @@ describe('Protractor Sync Options Plugin', () => {
       await simpleTest();
     });
 
-    it('should ignore setTimeout after redirect to non-agnular and back', async () => {
+    it('should ignore setTimeout after redirect to non-angular page and back', async () => {
       await page.redirectBtn.click();
       await browser.waitForAngularEnabled(false);
       const goBackBtn = $('#go-back');
@@ -88,5 +98,11 @@ describe('Protractor Sync Options Plugin', () => {
   // -----------------------------------------------------
   function simpleTest() {
     return expect(page.getTitleText()).toEqual('protractor-sync-options-plugin-app app is running!');
+  }
+
+  async function setTasks(tasks: IgnoreTask[]) {
+    plugin.config.ignoreTasks = tasks;
+    await plugin.patcher.restoreClientTestability();
+    await plugin.patcher.patchClientTestability(plugin.config);
   }
 });

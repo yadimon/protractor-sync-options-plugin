@@ -2,11 +2,17 @@
 // Protractor configuration file, see link for more information
 // https://github.com/angular/protractor/blob/master/lib/config.ts
 
+const tsConfigFile = process.env.PROTRACTOR_PLUGIN_TS_CONF_FILE || require('path').join(__dirname, './tsconfig.json');
 require('ts-node').register({
-  project: require('path').join(__dirname, './tsconfig.json')
+  project: tsConfigFile,
+});
+require("tsconfig-paths").register({
+  baseUrl: "./../",
+  paths: require(tsConfigFile).compilerOptions.paths
 });
 
-const { SpecReporter } = require('jasmine-spec-reporter');
+
+const {SpecReporter} = require('jasmine-spec-reporter');
 
 /** @type IgnoreTask[] */
 const ignoreTasks = [{source: 'setTimeout'}, {source: 'setInterval'}, {source: 'XMLHttpRequest.send'}]; // TODO change dynamic by tests
@@ -19,11 +25,10 @@ exports.config = {
   plugins: [
     {
       package: 'protractor-sync-options-plugin',
-      // path: "../projects/protractor-sync-options-plugin/src/public-api.ts", //for faster dev
       ignoreTasks: ignoreTasks,
     }
   ],
-  allScriptsTimeout: 11000,
+  allScriptsTimeout: 5000,
   specs: [
     './src/**/*.e2e-spec.ts'
   ],
@@ -36,12 +41,10 @@ exports.config = {
   jasmineNodeOpts: {
     showColors: true,
     defaultTimeoutInterval: 30000,
-    print: function() {}
+    print: function () {
+    }
   },
   onPrepare() {
-    require('ts-node').register({
-      project: require('path').join(__dirname, './tsconfig.json')
-    });
-    jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
+    jasmine.getEnv().addReporter(new SpecReporter({spec: {displayStacktrace: true}}));
   }
 };
