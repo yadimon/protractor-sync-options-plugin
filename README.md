@@ -40,7 +40,8 @@ exports.config = {
 ```
 
 * `{creationLocation: 'lodash'}` filters every promise, observable, setTimeout, setInterval etc from some code from `lodash` library  
-* `{source: 'setInterval', creationLocation: 'MyComponent.checkEveryTime'}` filters only `setTinterval` calls from  `myComponent`'s `checkEveryTime` method  
+* `{source: 'setInterval', creationLocation: 'MyComponent.checkEveryTime'}` filters only `setTinterval` calls from  `MyComponent`'s `checkEveryTime` method  
+* `{source: 'XMLHttpRequest.send'}` filters all XHR requests  
 
 see also [protractor.js](e2e/protractor.conf.js) file
 
@@ -56,7 +57,7 @@ The filter properties of one single element (creationLocation and source) are jo
 * XMLHttpRequest.send
 * requestAnimationFrame
 * webkitRequestAnimationFrame
-* mozRequestAnimationFrame'
+* mozRequestAnimationFrame
 
 got from [angular/packages/zone.js/lib/zone-spec/fake-async-test.ts](https://github.com/angular/angular/blob/71acf9dd4904f99e6248c07ffcfb264ea4c9b1e3/packages/zone.js/lib/zone-spec/fake-async-test.ts#L496)
 
@@ -64,10 +65,10 @@ promises and observables uses `setTimeout`/`setInterval` in most cases.
 
 #### `creationLocation` option
 Each task in zone.js has location simple by error.stacktrace of the called place.  
-The plugin searches through all function calls the defined in this property string/regex.  
+The plugin searches through all function calls of the async task, and try to match the defined in this property string/regex.  
 So, be careful with this setting, since it can match too much.  
 (for example you want to filter some library with name: 'time', and you have some method that has 'time' in its name, so the method's async calls will be filtered too)
 
 
 ## Contribution
-Will be happy to see your PRs!  
+Feel free to make a PRs / create an issue!  
