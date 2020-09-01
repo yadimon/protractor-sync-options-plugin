@@ -1,24 +1,77 @@
-# ProtractorSyncOptionsPlugin
+## Why?
+There are problems by protractor in case you have some long timeouts or intervals in your app.  
+Protractor will wait forever in such case.  
+This plugin let you setup ignore rules for some long async calls.  
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.7.
+## Setup
+* install the plugin `npm i protractor-sync-options-plugin -D`  
 
-## Code scaffolding
+* for now, you should add
+    ```
+    import 'zone.js/dist/task-tracking.js';
+    ```
+    to your `polyfills.ts` file right after `import 'zone.js/dist/zone';` line.  
+    (see github issues, help me to fix it)
 
-Run `ng generate component component-name --project protractor-sync-options-plugin` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project protractor-sync-options-plugin`.
-> Note: Don't forget to add `--project protractor-sync-options-plugin` or else it will be added to the default project in your `angular.json` file. 
+* in your `protractor.js` file add plugins definition:
+    ```
+    exports.config = {
+      plugins: [
+        {
+          package: 'protractor-sync-options-plugin',
+          ignoreTasks: [<filter1>, <filter2> ..],
+        }
+      ],
+      ...
+    ```
 
-## Build
+the filters are of type [IgnoreTask](ignoreTaskLink)
 
-Run `ng build protractor-sync-options-plugin` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Usage example
 
-## Publishing
+```
+exports.config = {
+  plugins: [
+    {
+      package: 'protractor-sync-options-plugin',
+      ignoreTasks: [{creationLocation: 'lodash'}, {source: 'setInterval', creationLocation: 'MyComponent.checkEveryTime'}, {source: 'XMLHttpRequest.send'}],
+    }
+  ],
+```
 
-After building your library with `ng build protractor-sync-options-plugin`, go to the dist folder `cd dist/protractor-sync-options-plugin` and run `npm publish`.
+* `{creationLocation: 'lodash'}` filters every promise, observable, setTimeout, setInterval etc from some code from `lodash` library  
+* `{source: 'setInterval', creationLocation: 'MyComponent.checkEveryTime'}` filters only `setTinterval` calls from  `myComponent`'s `checkEveryTime` method  
 
-## Running unit tests
+see also [protractor.js](protractor.js) file
 
-Run `ng test protractor-sync-options-plugin` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## 'API' Description
+The filter objects in the `ignoreTasks` array are joined over "OR" (disjunction)  
+The filter properties of one single element (creationLocation and source) are joined over "AND" (conjunction)  
 
-## Further help
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+#### `source` option (task types): 
+* setTimeout
+* setInterval
+* setImmediate
+* XMLHttpRequest.send
+* requestAnimationFrame
+* webkitRequestAnimationFrame
+* mozRequestAnimationFrame'
+
+got from [angular/packages/zone.js/lib/zone-spec/fake-async-test.ts](angularAsyncTestLink)
+
+promises and observables uses `setTimeout`/`setInterval` in most cases.
+
+#### `creationLocation` option
+Each task in zone.js has location simple by error.stacktrace of the called place.  
+The plugin searches through all function calls the defined in this property string/regex.  
+So, be careful with this setting, since it can match too much.  
+(for example you want to filter some library with name: 'time', and you have some method that has 'time' in its name, so the method's async calls will be filtered too)
+
+
+## Contribution
+Will be happy to see your PRs!  
+
+[ignoreTaskLink]: projects/protractor-sync-options-plugin/src/lib/interfaces.ts:11
+[protractor.js]: e2e/protractor.conf.js
+[angularAsyncTestLink]: https://github.com/angular/angular/blob/71acf9dd4904f99e6248c07ffcfb264ea4c9b1e3/packages/zone.js/lib/zone-spec/fake-async-test.ts#L496
