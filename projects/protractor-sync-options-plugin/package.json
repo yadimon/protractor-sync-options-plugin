@@ -1,6 +1,6 @@
 {
   "name": "protractor-sync-options-plugin",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "Protractor plugin to ignore specific async calls in angular application",
   "author": "Dmitry Gorelenkov <dmitry.gorelenkov@gmx.net>",
   "license": "MIT",
@@ -13,5 +13,14 @@
     "type": "git",
     "url": "https://github.com/yadimon/protractor-sync-options-plugin",
     "directory": "projects/protractor-sync-options-plugin"
-  }
+  },
+  "keywords": [
+    "protractor",
+    "plugin",
+    "angular",
+    "e2e",
+    "asyncTask",
+    "ignore async calls",
+    "testability"
+  ]
 }
