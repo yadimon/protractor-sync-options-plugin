@@ -1,5 +1,4 @@
 import {browser, ProtractorBrowser, ProtractorPlugin} from 'protractor';
-import 'zone.js/dist/zone.js';
 import {Patcher} from './patcher';
 import {SyncOptionsConfig} from './interfaces';
 

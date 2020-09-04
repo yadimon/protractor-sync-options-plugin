@@ -1,6 +1,9 @@
 // Angular internal, not intended for public API. But will be used by client script right now.
 import {PluginConfig} from 'protractor';
 
+// need for interfaces
+import 'zone.js';
+
 export interface PendingMacrotask {
   source: string;
   creationLocation: Error;
