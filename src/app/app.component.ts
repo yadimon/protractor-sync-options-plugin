@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {timer} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
@@ -61,7 +61,7 @@ export class AppComponent {
   }
 
   public navigateToNonAngular() {
-    window.location.assign('http://localhost:4200/non-angular.html');
+    window.location.assign(window.location.origin + '/non-angular.html');
   }
 }
 
