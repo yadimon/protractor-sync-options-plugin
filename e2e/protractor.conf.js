@@ -7,7 +7,7 @@ require('ts-node').register({
   project: tsConfigFile,
 });
 require("tsconfig-paths").register({
-  baseUrl: "./../",
+  baseUrl: './',
   paths: require(tsConfigFile).compilerOptions.paths
 });
 
@@ -24,7 +24,9 @@ exports.config = {
   SELENIUM_PROMISE_MANAGER: false,
   plugins: [
     {
-      package: 'protractor-sync-options-plugin',
+      // package: 'protractor-sync-options-plugin',
+      // inline: require('../projects/protractor-sync-options-plugin/src/public-api'),
+      path: '../projects/protractor-sync-options-plugin/src/public-api',
       ignoreTasks: ignoreTasks,
     }
   ],
