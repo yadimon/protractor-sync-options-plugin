@@ -1,5 +1,5 @@
 // workaround to export the plugin instance from package require
-import {SyncOptionsPlugin} from './lib/plugin';
+import {SyncOptionsPlugin} from './lib';
 
 const initializedPlugin = new SyncOptionsPlugin();
 Object.assign(exports, initializedPlugin);
