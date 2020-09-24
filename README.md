@@ -25,7 +25,7 @@ This plugin let you setup ignore rules for some long async calls.
       ...
     ```
 
-the filters are of type [IgnoreTask](projects/protractor-sync-options-plugin/src/lib/interfaces.ts#L11)
+the filters are of type [IgnoreTask](projects/protractor-sync-options-plugin/src/lib/interfaces.ts#L14)
 
 ## Usage example
 
@@ -34,20 +34,26 @@ exports.config = {
   plugins: [
     {
       package: 'protractor-sync-options-plugin',
-      ignoreTasks: [{creationLocation: 'lodash'}, {source: 'setInterval', creationLocation: 'MyComponent.checkEveryTime'}, {source: 'XMLHttpRequest.send'}],
+      ignoreTasks: [
+        {creationLocation: 'lodash'},
+        {source: 'setInterval', creationLocation: 'MyComponent.checkEveryTime'},
+        {source: 'XMLHttpRequest.send'}
+      ],
     }
   ],
 ```
 
-* `{creationLocation: 'lodash'}` filters every promise, observable, setTimeout, setInterval etc from some code from `lodash` library  
-* `{source: 'setInterval', creationLocation: 'MyComponent.checkEveryTime'}` filters only `setTinterval` calls from  `MyComponent`'s `checkEveryTime` method  
-* `{source: 'XMLHttpRequest.send'}` filters all XHR requests  
+* `{creationLocation: 'lodash'}`: filters every promise, observable, setTimeout, setInterval etc. from any code from `lodash` library  
+* `{source: 'setInterval', creationLocation: 'MyComponent.checkEveryTime'}`: filters only `setTinterval` calls from  `MyComponent`'s `checkEveryTime` method  
+* `{source: 'XMLHttpRequest.send'}`: filters all XHR requests  
+
+All 3 filters will be applied after each other, if any filter matches the current waiting task of protractor, the task will be ignored, and protractor would continue.
 
 see also [protractor.js](e2e/protractor.conf.js) file
 
 ## 'API' Description
-The filter objects in the `ignoreTasks` array are joined over "OR" (disjunction)  
-The filter properties of one single element (creationLocation and source) are joined over "AND" (conjunction)  
+The filter objects in the `ignoreTasks` array are applied over "OR" (disjunction)  
+The filter properties of one single element (creationLocation and source) are applied over "AND" (conjunction)  
 
 
 #### `source` option (task types): 
